@@ -1,0 +1,96 @@
+<h1 *ngIf="!esEdicion">Nuevo Proveedor</h1>
+
+<h1 *ngIf="esEdicion">Proveedor: {{ title }}</h1>
+<hr />
+
+<div class="text-right">
+  <button
+    routerLink="/proveedores"
+    class="mt-4"
+    mat-raised-button
+    color="warn"
+    type="button"
+  >
+    <i class="fa-sharp fa-solid fa-arrow-left-long"></i> Regresar
+  </button>
+</div>
+
+<form
+  (ngSubmit)="guardar()"
+  [formGroup]="forma"
+  autocomplete="off"
+  class="animate__animated animate__fadeIn"
+>
+  <div class="form mt-4 w-[600px]">
+    <!-- Input del ID -->
+    <mat-form-field *ngIf="esEdicion" class="w-full">
+      <input
+        type="text"
+        matInput
+        placeholder="ID"
+        formControlName="databaseId"
+        [(ngModel)]="proveedor.id"
+        readonly
+        [disabled]="true"
+      />
+      <mat-hint>Esto es un campo autogenerado por la DB</mat-hint>
+    </mat-form-field>
+
+    <!-- Input del nombre -->
+    <mat-form-field class="w-full">
+      <mat-label>Nombre del Proveedor</mat-label>
+      <input
+        [(ngModel)]="proveedor.nombreProveedor"
+        type="text"
+        matInput
+        formControlName="nombreProveedor"
+        required
+      />
+    </mat-form-field>
+
+    <!-- Input del tipo de producto -->
+    <mat-form-field class="w-full">
+      <mat-label>Tipo del Producto</mat-label>
+      <input
+        [(ngModel)]="proveedor.tipoDeProducto"
+        type="text"
+        matInput
+        formControlName="tipoDeProducto"
+        required
+      />
+    </mat-form-field>
+
+    <!-- Input del estado -->
+
+    <div>
+      <p>Estado del Proveedor</p>
+      <br />
+      <button
+        *ngIf="proveedor.estado"
+        (click)="proveedor.estado = false"
+        type="button"
+        mat-raised-button
+        class="bg-green-500 w-[50%]"
+      >
+        <i class="fa-regular fa-thumbs-up"></i> Activo
+      </button>
+
+      <button
+        *ngIf="!proveedor.estado"
+        (click)="proveedor.estado = true"
+        type="button"
+        mat-raised-button
+        class="bg-red-500 w-[50%]"
+      >
+        <i class="fa-regular fa-thumbs-down"></i> Inactivo
+      </button>
+
+      <hr class="my-4" />
+
+      <!-- Botón para guardar el formulario -->
+      <button mat-raised-button color="accent" type="submit" class="w-full">
+        <i class="fa-solid fa-floppy-disk"></i> Guardar
+      </button>
+    </div>
+  </div>
+</form>

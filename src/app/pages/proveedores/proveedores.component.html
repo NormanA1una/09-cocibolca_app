@@ -1,0 +1,111 @@
+<h1>Listado de Proveedores</h1>
+<hr />
+
+<div class="text-right">
+  <button
+    routerLink="/proveedor/nuevo"
+    class="mt-4"
+    mat-raised-button
+    color="primary"
+    type="button"
+  >
+    <i class="fa-regular fa-plus"></i> Agregar
+  </button>
+</div>
+
+<div
+  *ngIf="!isLoading && proveedores.length > 0"
+  class="overflow-hidden animate__animated animate__fadeIn mt-3"
+>
+  <table class="min-w-full text-left text-sm font-light">
+    <thead class="border-b font-medium bg-neutral-900 text-neutral-50">
+      <tr>
+        <th scope="col" class="px-6 py-4">ID</th>
+        <th scope="col" class="px-6 py-4">Nombre</th>
+        <th scope="col" class="px-6 py-4">Tipo de Producto</th>
+        <th scope="col" class="px-6 py-4">Activo</th>
+        <th scope="col" class="px-6 py-4">Logo</th>
+        <th scope="col" class="px-6 py-4">Herramientas</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="border-b" *ngFor="let proveedor of proveedores; let i = index">
+        <td class="whitespace-nowrap px-6 py-4 font-medium">
+          {{ proveedor.id }}
+        </td>
+        <td class="whitespace-nowrap px-6 py-4">
+          {{ proveedor.nombreProveedor }}
+        </td>
+        <td class="whitespace-nowrap px-6 py-4">
+          {{ proveedor.tipoDeProducto }}
+        </td>
+        <td class="whitespace-nowrap px-6 py-4">
+          <button
+            (click)="cambiarEstado(proveedor)"
+            *ngIf="proveedor.estado"
+            mat-flat-button
+            type="button"
+            class="bg-green-500 text-neutral-50 w-full max-w-[100px]"
+          >
+            Activo
+          </button>
+          <button
+            (click)="cambiarEstado(proveedor)"
+            *ngIf="!proveedor.estado"
+            mat-flat-button
+            type="button"
+            class="bg-red-500 text-neutral-50 w-full max-w-[100px]"
+          >
+            Inactivo
+          </button>
+        </td>
+
+        <!-- Google Drive for image hosting Angular -->
+        <td class="whitespace-nowrap px-6 py-4">{{ proveedor.logo }}</td>
+        <td class="whitespace-nowrap px-6 py-4">
+          <button
+            [routerLink]="['/proveedor', proveedor.id]"
+            mat-raised-button
+            type="button"
+            class="bg-blue-500 mr-1"
+          >
+            <i class="fa-solid fa-pen"></i>
+          </button>
+
+          <button
+            (click)="borrarProveedor(proveedor, i)"
+            mat-raised-button
+            type="button"
+            class="bg-red-500"
+          >
+            <i class="fa-sharp fa-solid fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<mat-card
+  *ngIf="isLoading"
+  class="mt-4 bg-blue-200 text-center animate__animated animate__fadeIn"
+>
+  <mat-card-title>Cargando</mat-card-title>
+  <mat-card-content>
+    <i class="fa-solid fa-spinner fa-spin fa-6x my-2"></i>
+
+    <p>Espere por favor</p>
+  </mat-card-content>
+</mat-card>
+
+<mat-card
+  *ngIf="!isLoading && proveedores.length === 0"
+  class="mt-4 bg-yellow-200 text-center animate__animated animate__fadeIn"
+>
+  <mat-card-title>No hay registros</mat-card-title>
+  <mat-card-content>
+    <i class="fa-solid fa-exclamation fa-6x my-2"></i>
+  </mat-card-content>
+</mat-card>
+
+<div class="h-5"></div>
