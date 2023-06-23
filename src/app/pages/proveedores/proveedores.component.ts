@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProveedorModel } from 'src/app/models/proveedor.model';
 import { ProveedoresServicesService } from 'src/app/services/proveedores-services.service';
+import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -9,12 +10,16 @@ import Swal from 'sweetalert2';
   styleUrls: ['./proveedores.component.css'],
 })
 export class ProveedoresComponent implements OnInit {
+  ip: string | undefined;
+
   proveedorUpdate = new ProveedorModel();
 
   proveedores: ProveedorModel[] = [];
   isLoading = false;
 
-  constructor(private proveedoresServices: ProveedoresServicesService) {}
+  constructor(private proveedoresServices: ProveedoresServicesService) {
+    this.ip = environment.ip;
+  }
 
   ngOnInit() {
     this.isLoading = true;

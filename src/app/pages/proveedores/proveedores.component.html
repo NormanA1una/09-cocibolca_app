@@ -1,5 +1,16 @@
-<h1>Listado de Proveedores</h1>
-<hr />
+<div class="flex">
+  <a routerLink="/proveedores">
+    <img
+      src="assets/img/volcano.png"
+      alt="Volcan Icon"
+      width="50"
+      height="50"
+      class="mr-2"
+    />
+  </a>
+  <h1 class="my-auto">Listado de Proveedores</h1>
+</div>
+<hr class="mt-2" />
 
 <div class="text-right">
   <button
@@ -23,7 +34,7 @@
         <th scope="col" class="px-6 py-4">ID</th>
         <th scope="col" class="px-6 py-4">Nombre</th>
         <th scope="col" class="px-6 py-4">Tipo de Producto</th>
-        <th scope="col" class="px-6 py-4">Activo</th>
+        <th scope="col" class="px-6 py-4">Estado</th>
         <th scope="col" class="px-6 py-4">Logo</th>
         <th scope="col" class="px-6 py-4">Herramientas</th>
       </tr>
@@ -61,7 +72,9 @@
         </td>
 
         <!-- Google Drive for image hosting Angular -->
-        <td class="whitespace-nowrap px-6 py-4">{{ proveedor.logo }}</td>
+        <td class="whitespace-nowrap px-6 py-4">
+          <img width="50" height="50" [src]="ip + proveedor.logo" alt="asda" />
+        </td>
         <td class="whitespace-nowrap px-6 py-4">
           <button
             [routerLink]="['/proveedor', proveedor.id]"

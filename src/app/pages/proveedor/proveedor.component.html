@@ -1,8 +1,21 @@
-<h1 *ngIf="!esEdicion">Nuevo Proveedor</h1>
+<div class="flex">
+  <a routerLink="/proveedores">
+    <img
+      src="assets/img/volcano.png"
+      alt="Volcan Icon"
+      width="50"
+      height="50"
+      class="mr-2"
+    />
+  </a>
+  <h1 *ngIf="!esEdicion" class="my-auto">Nuevo Proveedor</h1>
 
-<h1 *ngIf="esEdicion">Proveedor: {{ title }}</h1>
-<hr />
+  <h1 *ngIf="esEdicion" class="my-auto">Proveedor: {{ title }}</h1>
+</div>
 
+<hr class="mt-2" />
+
+<!-- (click)="onRegresar()" va en el boton de regresar -->
 <div class="text-right">
   <button
     routerLink="/proveedores"
@@ -20,6 +33,7 @@
   [formGroup]="forma"
   autocomplete="off"
   class="animate__animated animate__fadeIn"
+  enctype="multipart/form-data"
 >
   <div class="form mt-4 w-[600px]">
     <!-- Input del ID -->
@@ -60,8 +74,51 @@
       />
     </mat-form-field>
 
-    <!-- Input del estado -->
+    <!-- Input para cargar la imagen -->
+    <div class="flex w-full mb-5">
+      <input
+        type="file"
+        class="hidden"
+        (change)="onFileSelected($event)"
+        #fileUpload
+      />
 
+      <div class="file-upload">
+        {{ fileName || messageNoneFile }}
+
+        <!-- TODO componer la posicion de los iconos -->
+        <button
+          *ngIf="!proveedor.logo"
+          mat-raised-button
+          type="button"
+          color="primary"
+          class="upload-btn text-center"
+          (click)="fileUpload.click()"
+        >
+          <i class="fa-solid fa-paperclip"></i>
+        </button>
+
+        <button
+          *ngIf="proveedor.logo"
+          mat-raised-button
+          type="button"
+          color="warn"
+          class="upload-btn text-center"
+          (click)="[deleteResourceOnUnload(), (proveedor.logo = '')]"
+        >
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </div>
+
+      <img
+        *ngIf="proveedor.logo"
+        [src]="ip + proveedor.logo"
+        alt="ProveedorImagen
+        "
+      />
+    </div>
+
+    <!-- Input del estado -->
     <div>
       <p>Estado del Proveedor</p>
       <br />

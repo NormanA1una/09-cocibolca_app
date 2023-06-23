@@ -16,6 +16,7 @@ export class ProveedoresServicesService {
     return this.http.post(`${this.url}/supplier`, proveedor).pipe(
       map((resp: any) => {
         proveedor.id = resp.id;
+        console.log(proveedor);
         return proveedor;
       })
     );
