@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ProveedorModel } from 'src/app/models/proveedor.model';
 import { ProveedoresServicesService } from 'src/app/services/proveedores-services.service';
@@ -17,7 +18,10 @@ export class ProveedoresComponent implements OnInit {
   proveedores: ProveedorModel[] = [];
   isLoading = false;
 
-  constructor(private proveedoresServices: ProveedoresServicesService) {
+  constructor(
+    private proveedoresServices: ProveedoresServicesService,
+    private http: HttpClient
+  ) {
     this.ip = environment.ip;
   }
 
@@ -72,6 +76,13 @@ export class ProveedoresComponent implements OnInit {
       if (resp.value) {
         this.proveedores.splice(i, 1);
 
+        this.http
+          .delete(`http://localhost:3000/file/${proveedor.logo}`)
+          .subscribe((resp) => {
+            console.log(resp);
+
+            console.log('Llamada HTTP DELETE exitosa');
+          });
         this.proveedoresServices.deleteProveedor(proveedor.id).subscribe();
       }
     });

@@ -1,24 +1,24 @@
 <div class="flex">
   <a routerLink="/proveedores">
     <img
-      src="assets/img/volcano.png"
+      src="assets/img/licoreriaCocibolcaLogo.jpg"
       alt="Volcan Icon"
-      width="50"
-      height="50"
-      class="mr-2"
+      width="150"
+      class="mr-2 rounded-md"
     />
   </a>
   <h1 *ngIf="!esEdicion" class="my-auto">Nuevo Proveedor</h1>
 
-  <h1 *ngIf="esEdicion" class="my-auto">Proveedor: {{ title }}</h1>
+  <h1 *ngIf="esEdicion" class="my-auto font-bold">
+    Proveedor: <span class="font-normal">{{ title }}</span>
+  </h1>
 </div>
 
 <hr class="mt-2" />
 
-<!-- (click)="onRegresar()" va en el boton de regresar -->
 <div class="text-right">
   <button
-    routerLink="/proveedores"
+    (click)="onRegresar()"
     class="mt-4"
     mat-raised-button
     color="warn"
@@ -51,27 +51,39 @@
     </mat-form-field>
 
     <!-- Input del nombre -->
-    <mat-form-field class="w-full">
+    <mat-form-field class="w-full mb-4">
       <mat-label>Nombre del Proveedor</mat-label>
       <input
         [(ngModel)]="proveedor.nombreProveedor"
         type="text"
         matInput
         formControlName="nombreProveedor"
-        required
       />
+      <mat-hint *ngIf="nombreNoValido" class="text-red-600"
+        >El campo requiere de 3 letras como mínimo
+        <i
+          class="fa-solid fa-triangle-exclamation fa-xl"
+          style="color: #ff0000"
+        ></i
+      ></mat-hint>
     </mat-form-field>
 
     <!-- Input del tipo de producto -->
-    <mat-form-field class="w-full">
+    <mat-form-field class="w-full mb-4">
       <mat-label>Tipo del Producto</mat-label>
       <input
         [(ngModel)]="proveedor.tipoDeProducto"
         type="text"
         matInput
         formControlName="tipoDeProducto"
-        required
       />
+      <mat-hint *ngIf="tipoDeProductoNoValido" class="text-red-600"
+        >El campo requiere de 3 letras como mínimo
+        <i
+          class="fa-solid fa-triangle-exclamation fa-xl"
+          style="color: #ff0000"
+        ></i
+      ></mat-hint>
     </mat-form-field>
 
     <!-- Input para cargar la imagen -->
@@ -83,7 +95,7 @@
         #fileUpload
       />
 
-      <div class="file-upload">
+      <div class="file-upload mr-2">
         {{ fileName || messageNoneFile }}
 
         <!-- TODO componer la posicion de los iconos -->

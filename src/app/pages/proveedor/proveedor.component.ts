@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ProveedorModel } from 'src/app/models/proveedor.model';
 import { ProveedoresServicesService } from 'src/app/services/proveedores-services.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,17 +16,24 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./proveedor.component.css'],
 })
 export class ProveedorComponent implements OnInit, OnDestroy {
+  //Mensaje utilizado cuando no hay ninguna imagen cargada en el input de cargar imagenes
   messageNoneFile = 'No file uploaded yet.';
 
+  //variable que captura el valor de la ip, que se encuentra en una variable de entorno
   ip: string = environment.ip;
 
+  //boolean que ayuda al cambio de botones con el ngIf
   btnDeleteImage = true;
 
+  //string que ayuda a capturar el nombre del archivo que se esta cargando en el input de carga para mostrarlo en pantalla
   fileName = '';
 
+  //boolean que me ayuda a mostrar el h1 en donde se dice que se tiene que agregar un proveedor y no actualizar uno nuevo
   esEdicion = false;
 
+  //Ayuda a mostrar el nombre del proveedor cuando proveedor funciona como pantalla de actualización
   title: string = '';
+
   //Gracias a estro podemos realizar los formularios reactivos
   forma!: FormGroup;
 
@@ -43,9 +50,12 @@ export class ProveedorComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router
   ) {
+    //en le constructor se manda a llamar el formulario, pues es lo primero que se dispara al entrar a la pagina
     this.crearFormulario();
   }
 
+  //el ngOnInit simplemente nos sirve para que si nos encontramos en la pagina de proveedor/:id y no proveedor/nuevo, se cargue la
+  //info del proveedor que seleccionamos
   ngOnInit() {
     const id: any = this.route.snapshot.paramMap.get('id');
 
@@ -59,23 +69,50 @@ export class ProveedorComponent implements OnInit, OnDestroy {
     }
   }
 
+  //El ngOnDestroy nos esta ayudando a manejar una alerta cuando nos encontramos agregando un proveedor y le damos a regresar
+  //ya sea en el btn del nav o en el btn creado por nosotros, lo ideal es que se pudiera manejar de otra forma la cual se pudiera cancelar
   ngOnDestroy() {
+    const id: any = this.route.snapshot.paramMap.get('id');
+
+    if (id !== 'nuevo') {
+      return;
+    }
+
     alert(
       'Estas seguro que quiere abandonar la pagina? Perderas lo que no hayas guardado!'
     );
   }
 
+  //get que nos ayuda para la validacion del nombre, es decir para el ngIf del hint
+  get nombreNoValido() {
+    return (
+      this.forma.get('nombreProveedor')?.invalid &&
+      this.forma.get('nombreProveedor')?.touched
+    );
+  }
+
+  //get que nos ayuda para la validacion del tipo de producto, es decir para el ngIf del hint
+  get tipoDeProductoNoValido() {
+    return (
+      this.forma.get('tipoDeProducto')?.invalid &&
+      this.forma.get('tipoDeProducto')?.touched
+    );
+  }
+
+  //Aca se crea el formulario de forma reactiva, el cual es mandado a llamar desde el constructor
   crearFormulario() {
     this.forma = this.fb.group({
       databaseId: [''],
-      nombreProveedor: [''],
-      tipoDeProducto: [''],
+      nombreProveedor: ['', [Validators.required, Validators.minLength(3)]],
+      tipoDeProducto: ['', [Validators.required, Validators.minLength(3)]],
       activo: [''],
       logo: [''],
       tools: [''],
     });
   }
 
+  //método que nos permite subir imagenes al servidor para luego retornar una referencia, la cual se ocupara para colorcarla en el src
+  //de la img y renderizarla en el front
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
 
@@ -103,43 +140,27 @@ export class ProveedorComponent implements OnInit, OnDestroy {
     }
   }
 
-  //TODO Mejorar este botón
-  /* onRegresar() {
-    const id: any = this.route.snapshot.paramMap.get('id');
+  //btn que nos sirve para regresar a la pagina principal, cabe mencionar que esta navegacion igual dispara la alerta del ngOnDestroy
+  onRegresar() {
+    this.router.navigate(['/proveedores']);
+  }
 
-    const confirmationMessage =
-      '¿Estás seguro de que deseas retroceder? Los cambios no guardados se perderán.';
-
-    if (id !== 'nuevo') {
-      return;
-    } else if (confirm(confirmationMessage)) {
-      // El usuario aceptó retroceder
-      this.deleteResourceOnUnload();
-      this.router.navigate(['/proveedores']);
-    } else {
-      // El usuario canceló el retroceso pero igual se borra la imagen del disco
-      if (id !== 'nuevo') {
-        return;
-      } else {
-        this.deleteResourceOnUnload();
-        this.router.navigate(['/proveedor/nuevo']);
-      }
-    }
-  } */
-
+  //metodo que ocupada el evento de beforeUnload de windows, que en este caso es utilizado para mandar una alerta que advierta que
+  //aquello que no este guardado se eliminará
   @HostListener('window:beforeunload', ['$event'])
   onBeforeUnload(event: BeforeUnloadEvent) {
     event.preventDefault();
     event.returnValue = true;
   }
 
+  //metodo vinculado a un btn que nos permite eliminar la imagen que estamos subiendo en el formulario, en este caso en caso que se
+  //quiera subir otra, cabe mencionar que esto es necesario para no llenar la memoria pues en el estado actual de la app las imagenes
+  //se almacenan en una ruta directa en la computadora
   deleteResourceOnUnload() {
     if (this.proveedor.logo === undefined) {
       console.log('Imagen del proveedor no subida');
       return;
     }
-
-    console.log(this.proveedor.logo);
 
     this.http
       .delete(`http://localhost:3000/file/${this.proveedor.logo}`)
@@ -149,10 +170,20 @@ export class ProveedorComponent implements OnInit, OnDestroy {
       });
   }
 
+  //metodo importante, el caul permite hacer el submit al todo el form, en donde se valida si esta invalido y se clickea el save para
+  //que mande las alertas, ademas agregados los alert de Swal en donde nos permiten tener una interfaz agradable, cabe mencionar que
+  //está tentable utilizar el FormGroup.reset pero se necesita debuguear cierto inconvenientes
   guardar() {
     if (this.forma.invalid) {
-      console.log('Formulario no válido');
-      return;
+      return Object.values(this.forma.controls).forEach((control) => {
+        if (control instanceof FormGroup) {
+          Object.values(control.controls).forEach(
+            (control) => control.markAsTouched
+          );
+        } else {
+          control.markAsTouched;
+        }
+      });
     }
 
     Swal.fire({
@@ -171,13 +202,16 @@ export class ProveedorComponent implements OnInit, OnDestroy {
     }
 
     peticion.subscribe((resp) => {
-      console.log(resp);
-
       Swal.fire({
         title: this.proveedor.nombreProveedor,
         text: 'Información actualizada correctamente',
         icon: 'success',
       });
     });
+
+    /* this.forma.reset({
+      nombreProveedor: '',
+      tipoDeProducto: '',
+    }); */
   }
 }
