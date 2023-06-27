@@ -40,6 +40,8 @@ export class ProveedorComponent implements OnInit, OnDestroy {
   //Aca importamos el modelo de lo que deberia de tener un Proveedor
   proveedor = new ProveedorModel();
 
+  statusSubmit = 'noSubmit';
+
   //En el constructor tenemos el fb que es el que nos permite hacer el .group y no tener que estar creando tantas instancias
   //Tenemos tambien el proveedorServices que es el que nos trae la info del BackEnd
   //Ahora para poder leer el id que viene como parametro en el URL tenemos el activatedRoute
@@ -61,9 +63,12 @@ export class ProveedorComponent implements OnInit, OnDestroy {
 
     if (id !== 'nuevo') {
       this.proveedorService.getProveedor(id).subscribe((resp: any) => {
+        console.log(resp);
+
         this.proveedor = resp as ProveedorModel;
         this.esEdicion = true;
         this.title = this.proveedor.nombreProveedor;
+        this.statusSubmit = 'submit';
         console.log(this.proveedor);
       });
     }
@@ -122,6 +127,7 @@ export class ProveedorComponent implements OnInit, OnDestroy {
     );
 
     if (file) {
+      console.log(file);
       this.fileName = file.name;
 
       const formData = new FormData();
@@ -170,7 +176,7 @@ export class ProveedorComponent implements OnInit, OnDestroy {
       });
   }
 
-  //metodo importante, el caul permite hacer el submit al todo el form, en donde se valida si esta invalido y se clickea el save para
+  //metodo importante, el cual permite hacer el submit al todo el form, en donde se valida si esta invalido y se clickea el save para
   //que mande las alertas, ademas agregados los alert de Swal en donde nos permiten tener una interfaz agradable, cabe mencionar que
   //está tentable utilizar el FormGroup.reset pero se necesita debuguear cierto inconvenientes
   guardar() {
@@ -207,6 +213,8 @@ export class ProveedorComponent implements OnInit, OnDestroy {
         text: 'Información actualizada correctamente',
         icon: 'success',
       });
+
+      this.statusSubmit = 'submit';
     });
 
     /* this.forma.reset({
