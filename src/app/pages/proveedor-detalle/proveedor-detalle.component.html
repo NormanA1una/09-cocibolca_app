@@ -1,0 +1,108 @@
+<div class="flex items-center mb-3">
+  <a routerLink="/proveedores">
+    <img
+      src="assets/img/licoreriaCocibolcaLogo.jpg"
+      alt="Volcan Icon"
+      width="150"
+      class="mr-2 rounded-md"
+    />
+  </a>
+  <div class="ml-4">
+    <h1 class="my-auto font-bold">Agregar Producto nuevo</h1>
+  </div>
+</div>
+<hr class="my-2" />
+
+<div class="text-right">
+  <button
+    routerLink="/proveedores"
+    class="mt-4 mr-2"
+    mat-raised-button
+    color="accent"
+    type="button"
+  >
+    <i class="fa-sharp fa-solid fa-arrow-left-long"></i> Regresar a Proveedores
+  </button>
+
+  <button
+    routerLink="/agregarProducto/nuevo"
+    class="mt-4"
+    mat-raised-button
+    color="primary"
+    type="button"
+  >
+    <i class="fa-regular fa-plus"></i> Agregar Producto
+  </button>
+</div>
+
+<div class="overflow-hidden animate__animated animate__fadeIn mt-3">
+  <table class="min-w-full text-left text-sm font-light">
+    <thead class="border-b font-medium bg-neutral-900 text-neutral-50">
+      <tr>
+        <th scope="col" class="px-6 py-4">ID</th>
+        <th scope="col" class="px-6 py-4">Nombre del Producto</th>
+        <th scope="col" class="px-6 py-4">Cantidad a mano</th>
+        <th scope="col" class="px-6 py-4">Cantidad contada</th>
+        <th scope="col" class="px-6 py-4">Imagen de presentación</th>
+        <th scope="col" class="px-6 py-4">Fecha de Inventario</th>
+        <th scope="col" class="px-6 py-4">Proveedor</th>
+        <th scope="col" class="px-6 py-4">Herramientas</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let producto of productos; let i = index" class="border-b">
+        <td class="whitespace-nowrap px-6 py-4 font-medium">
+          {{ producto.id }}
+        </td>
+        <td class="whitespace-nowrap px-6 py-4 font-medium">
+          {{ producto.nombreProducto }}
+        </td>
+        <td class="whitespace-nowrap px-6 py-4 font-medium">
+          {{ producto.cantidadAMano }}
+        </td>
+        <td class="whitespace-nowrap px-6 py-4 font-medium">
+          {{ producto.cantidadContada }}
+        </td>
+        <td class="whitespace-nowrap px-6 py-4 font-medium">
+          <img
+            [src]="ipImg + producto.presentacion"
+            alt="noImage"
+            class="h-[50px] w-[50px]"
+          />
+        </td>
+        <td class="whitespace-nowrap px-6 py-4 font-medium">
+          {{ producto.fechaDeInventario | date : "MMMM - dd - y" : " " : "es" }}
+        </td>
+        <td class="whitespace-nowrap px-6 py-4 font-medium">
+          {{ producto.nombreSupplier }}
+        </td>
+        <td class="whitespace-nowrap px-6 py-4 font-medium">
+          <button
+            [routerLink]="['/agregarProducto', producto.id]"
+            mat-raised-button
+            type="button"
+            class="bg-blue-500 mr-1"
+          >
+            <i class="fa-solid fa-pen"></i>
+          </button>
+
+          <!-- Aca este btn llevará a un componente que registre el historial de inventarios, se hará a futuro, por el momento solo
+               disparará una alerta con Swal -->
+          <button mat-raised-button type="button" class="bg-slate-500 mr-1">
+            <i class="fa-solid fa-list fa-lg"></i>
+          </button>
+
+          <!-- Aca hay que poner el evento click que elimine un producto de la base de datos -->
+          <button
+            (click)="deleteProducto(producto, i)"
+            mat-raised-button
+            type="button"
+            class="bg-red-500"
+          >
+            <i class="fa-sharp fa-solid fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

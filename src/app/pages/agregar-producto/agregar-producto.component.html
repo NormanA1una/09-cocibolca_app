@@ -1,0 +1,207 @@
+<div class="flex">
+  <h1 *ngIf="!esEdicion" class="my-auto font-bold">Nuevo Producto</h1>
+
+  <!-- Aca hay que hacer la lógica de que si es edición de producto salga el nombre del producto -->
+  <h1 *ngIf="esEdicion" class="my-auto font-bold">
+    Producto: <span class="font-normal">{{ title }}</span>
+  </h1>
+</div>
+
+<hr class="mt-2" />
+
+<form
+  (ngSubmit)="guardarForm()"
+  [formGroup]="forma"
+  autocomplete="off"
+  class="animate__animated animate__fadeIn"
+  enctype="multipart/form-data"
+>
+  <div class="form mt-4 flex justify-between">
+    <!-- Div de completar el formulario -->
+    <div class="w-[49%]">
+      <mat-form-field *ngIf="esEdicion" class="w-full">
+        <input
+          [(ngModel)]="producto.id"
+          type="text"
+          matInput
+          placeholder="ID"
+          formControlName="databaseID"
+          readonly
+          [disabled]="true"
+        />
+        <mat-hint>Esto es un campo autogenerado por la DB</mat-hint>
+      </mat-form-field>
+
+      <!-- Input del nombre -->
+      <mat-form-field class="w-full mb-4">
+        <mat-label>Nombre del Producto</mat-label>
+
+        <input
+          [(ngModel)]="producto.nombreProducto"
+          type="text"
+          matInput
+          formControlName="nombreProducto"
+        />
+
+        <mat-hint *ngIf="nombreProductoInvalido" class="text-red-600"
+          >El campo requiere de 3 letras como mínimo
+          <i
+            class="fa-solid fa-triangle-exclamation fa-xl"
+            style="color: #ff0000"
+          ></i
+        ></mat-hint>
+      </mat-form-field>
+
+      <!-- div que engloba los inputs para poner la cantidad a mano y contada -->
+      <div class="flex justify-between my-5">
+        <label class="mr-5">Cantidad a Mano</label>
+        <mat-form-field class="mr-14">
+          <input
+            [(ngModel)]="producto.cantidadAMano"
+            type="number"
+            matInput
+            formControlName="cantidadAMano"
+          />
+        </mat-form-field>
+
+        <label class="mr-5">Cantidad Contada</label>
+        <mat-form-field>
+          <input
+            [(ngModel)]="producto.cantidadContada"
+            type="number"
+            matInput
+            formControlName="contada"
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="flex justify-between">
+        <label class="mr-6">Fecha de Inventario</label>
+        <mat-form-field class="rounded">
+          <mat-label>Escoja una fecha</mat-label>
+          <input
+            [(ngModel)]="producto.fechaDeInventario"
+            matInput
+            [matDatepicker]="picker"
+            formControlName="fechaDeInventario"
+          />
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <label class="ml-10 mr-6">Proveedor</label>
+        <mat-form-field>
+          <mat-label>Seleccione Proveedor</mat-label>
+          <mat-select
+            [(ngModel)]="producto.nombreSupplier"
+            formControlName="nombreSupplier"
+          >
+            <mat-option
+              *ngFor="let proveedor of nombreProveedores"
+              [value]="proveedor.value"
+            >
+              {{ proveedor.value }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="w-[49%] my-auto">
+      <p>Presentación del Producto:</p>
+
+      <div class="w-[49%] flex flex-col items-center justify-end mb-10 mx-auto">
+        <div class="h-full max-h-[200px]">
+          <!-- aca va este *ngIf="!proveedor.logo" -->
+          <img
+            *ngIf="!producto.presentacion"
+            src="assets/img/no-photo-available.png"
+            alt="No Image"
+            class="w-[230px] h-full mx-auto"
+          />
+
+          <img
+            *ngIf="producto.presentacion"
+            [src]="ipImg + producto.presentacion"
+            alt="ProductoImg"
+            class="w-[230px] h-[200px] mx-auto mb-2"
+          />
+
+          <!-- Input para cargar la imagen -->
+          <input
+            (change)="onFileSelected($event)"
+            type="file"
+            class="hidden"
+            #fileUpload
+          />
+        </div>
+        <div class="file-upload w-full text-center">
+          <button
+            *ngIf="!producto.presentacion"
+            mat-raised-button
+            type="button"
+            color="primary"
+            class="upload-btn text-center w-80 mt-2"
+            (click)="fileUpload.click()"
+          >
+            {{ messageNoneFile }}
+            <i class="fa-solid fa-paperclip ml-4"></i>
+          </button>
+
+          <button
+            *ngIf="producto.presentacion"
+            mat-raised-button
+            type="button"
+            color="warn"
+            class="upload-btn text-center w-80 mt-2"
+            (click)="[deleteResourceOnUnload(), (producto.presentacion = '')]"
+          >
+            {{ fileName || producto.presentacion }}
+            <i class="fa-solid fa-trash ml-4"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Div de los btn importantes -->
+  <div [ngSwitch]="statusSubmit" class="w-full mt-10 text-center">
+    <!-- Botón para guardar el formulario -->
+    <button
+      mat-raised-button
+      color="accent"
+      type="submit"
+      class="w-[152px] mr-4"
+    >
+      <i class="fa-solid fa-floppy-disk"></i> Guardar
+    </button>
+
+    <!-- Botón para regresar a la pagina principal -->
+
+    <button
+      *ngSwitchCase="'noSubmit'"
+      (click)="onRegresar()"
+      class="w-[152px]"
+      mat-raised-button
+      color="warn"
+      type="button"
+    >
+      <i class="fa-sharp fa-solid fa-arrow-left-long"></i> Cancelar
+    </button>
+
+    <button
+      *ngSwitchCase="'submit'"
+      (click)="onRegresar()"
+      class="w-[152px]"
+      mat-raised-button
+      color="warn"
+      type="button"
+    >
+      <i class="fa-sharp fa-solid fa-arrow-left-long"></i> Regresar
+    </button>
+  </div>
+</form>

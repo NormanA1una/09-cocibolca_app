@@ -11,6 +11,8 @@ import Swal from 'sweetalert2';
   styleUrls: ['./proveedores.component.css'],
 })
 export class ProveedoresComponent implements OnInit {
+  // lengthTable: number = 0;
+
   ip: string | undefined;
 
   proveedorUpdate = new ProveedorModel();
@@ -29,8 +31,9 @@ export class ProveedoresComponent implements OnInit {
     this.isLoading = true;
 
     this.proveedoresServices.getProveedores().subscribe((resp: any) => {
+      console.log(resp);
+
       this.proveedores = resp.reverse();
-      console.log(this.proveedores);
       this.isLoading = false;
     });
   }

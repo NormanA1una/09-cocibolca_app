@@ -13,13 +13,22 @@
 
 <div class="text-right">
   <button
+    [routerLink]="['/productos']"
+    mat-raised-button
+    type="button"
+    class="bg-slate-500 mr-1 mt-4"
+  >
+    <i class="fa-solid fa-list fa-lg"></i> Productos
+  </button>
+
+  <button
     routerLink="/proveedor/nuevo"
     class="mt-4"
     mat-raised-button
     color="primary"
     type="button"
   >
-    <i class="fa-regular fa-plus"></i> Agregar
+    <i class="fa-regular fa-plus"></i> Agregar Proveedor
   </button>
 </div>
 
@@ -70,7 +79,6 @@
           </button>
         </td>
 
-        <!-- Google Drive for image hosting Angular -->
         <td class="whitespace-nowrap px-6 py-4">
           <img width="50" height="50" [src]="ip + proveedor.logo" alt="asda" />
         </td>
@@ -96,6 +104,7 @@
       </tr>
     </tbody>
   </table>
+  <!-- <mat-paginator [length]="lengthTable" [pageSize]="2"> </mat-paginator> -->
 </div>
 
 <mat-card

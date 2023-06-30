@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ProveedorModel } from '../models/proveedor.model';
 
-import { map, delay } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +12,7 @@ export class ProveedoresServicesService {
 
   constructor(private http: HttpClient) {}
 
+  //Servicio referente a los proveedores!!
   crearProveedor(proveedor: ProveedorModel) {
     return this.http.post(`${this.url}/supplier`, proveedor).pipe(
       map((resp: any) => {
@@ -28,7 +29,7 @@ export class ProveedoresServicesService {
   }
 
   getProveedores() {
-    return this.http.get(`${this.url}/supplier`).pipe(delay(0));
+    return this.http.get(`${this.url}/supplier`);
   }
 
   getProveedor(id: string) {
