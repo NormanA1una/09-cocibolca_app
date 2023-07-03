@@ -1,5 +1,5 @@
 export class ProductoModel {
-  id!: string;
+  id!: string | undefined;
   nombreProducto!: string;
   cantidadAMano!: number;
   cantidadContada!: number;

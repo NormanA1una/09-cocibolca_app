@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
   templateUrl: './agregar-producto.component.html',
   styleUrls: ['./agregar-producto.component.css'],
 })
-export class AgregarProductoComponent implements OnInit {
+export class AgregarProductoComponent implements OnInit, OnDestroy {
   ipImg: string = environment.ipImg;
 
   statusSubmit = 'noSubmit';
@@ -50,16 +50,16 @@ export class AgregarProductoComponent implements OnInit {
     this.crearFormulario();
 
     this.proveedorServices.getProveedores().subscribe((resp: any) => {
-      console.log(resp);
       resp.forEach((element: any) => {
         const obj: any = { value: element.nombreProveedor };
         this.nombreProveedores.push(obj);
-        console.log(this.nombreProveedores);
       });
     });
   }
 
   ngOnInit() {
+    console.log(this.forma);
+
     const id: any = this.route.snapshot.paramMap.get('id');
 
     if (id !== 'nuevo') {
@@ -73,6 +73,18 @@ export class AgregarProductoComponent implements OnInit {
         console.log(this.producto);
       });
     }
+  }
+
+  ngOnDestroy() {
+    const id: any = this.route.snapshot.paramMap.get('id');
+
+    if (id !== 'nuevo') {
+      return;
+    }
+
+    alert(
+      'Estas seguro que quiere abandonar la pagina? Perderas lo que no hayas guardado!'
+    );
   }
 
   get nombreProductoInvalido() {
@@ -176,7 +188,14 @@ export class AgregarProductoComponent implements OnInit {
         icon: 'success',
       });
 
+      console.log(resp.id);
+      console.log(this.forma);
+
       this.statusSubmit = 'submit';
+      this.forma.reset();
+      this.fileName = '';
+      this.producto.presentacion = '';
+      this.producto.id = undefined;
     });
   }
 }

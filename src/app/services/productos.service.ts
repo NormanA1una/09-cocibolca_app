@@ -38,7 +38,7 @@ export class ProductosService {
     return this.http.get(`${this.url}/product-supplier/${id}`);
   }
 
-  deleteProducto(id: string) {
+  deleteProducto(id: string | undefined) {
     return this.http.delete(`${this.url}/product-supplier/${id}`);
   }
 }

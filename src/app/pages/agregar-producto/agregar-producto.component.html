@@ -85,7 +85,7 @@
             [matDatepicker]="picker"
             formControlName="fechaDeInventario"
           />
-          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-hint>DD/MM/YYYY</mat-hint>
           <mat-datepicker-toggle
             matIconSuffix
             [for]="picker"
@@ -167,6 +167,8 @@
       </div>
     </div>
   </div>
+
+  <hr class="my-6" />
 
   <!-- Div de los btn importantes -->
   <div [ngSwitch]="statusSubmit" class="w-full mt-10 text-center">

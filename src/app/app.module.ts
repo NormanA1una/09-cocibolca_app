@@ -12,6 +12,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -47,6 +48,7 @@ registerLocaleData(localeEs);
     MatSelectModule,
     MatPaginatorModule,
     MatSortModule,
+    MatTableModule,
     MatDatepickerModule,
     MatNativeDateModule,
     ReactiveFormsModule,
