@@ -36,7 +36,7 @@ export class ProveedoresServicesService {
     return this.http.get(`${this.url}/supplier/${id}`);
   }
 
-  deleteProveedor(id: string) {
+  deleteProveedor(id: string | undefined) {
     return this.http.delete(`${this.url}/supplier/${id}`);
   }
 }

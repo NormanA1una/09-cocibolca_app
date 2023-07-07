@@ -114,11 +114,6 @@ export class AgregarProductoComponent implements OnInit, OnDestroy {
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
 
-    console.log(
-      'Producto antes de que se suba la imagen',
-      this.producto.presentacion
-    );
-
     if (file) {
       this.fileName = file.name;
 

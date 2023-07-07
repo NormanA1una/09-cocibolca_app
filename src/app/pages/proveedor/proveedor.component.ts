@@ -215,11 +215,10 @@ export class ProveedorComponent implements OnInit, OnDestroy {
       });
 
       this.statusSubmit = 'submit';
+      this.forma.reset();
+      this.fileName = '';
+      this.proveedor.logo = '';
+      this.proveedor.id = undefined;
     });
-
-    /* this.forma.reset({
-      nombreProveedor: '',
-      tipoDeProducto: '',
-    }); */
   }
 }

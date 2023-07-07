@@ -1,5 +1,5 @@
 export class ProveedorModel {
-  id!: string;
+  id!: string | undefined;
   nombreProveedor!: string;
   tipoDeProducto!: string;
   estado: boolean;

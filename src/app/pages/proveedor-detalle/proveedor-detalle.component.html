@@ -35,115 +35,81 @@
   </button>
 </div>
 
-<div class="overflow-hidden animate__animated animate__fadeIn mt-3">
-  <table class="min-w-full text-left text-sm font-light">
-    <thead class="border-b font-medium bg-neutral-900 text-neutral-50">
-      <tr>
-        <th scope="col" class="px-6 py-4">ID</th>
-        <th scope="col" class="px-6 py-4">Nombre del Producto</th>
-        <th scope="col" class="px-6 py-4">Cantidad a mano</th>
-        <th scope="col" class="px-6 py-4">Cantidad contada</th>
-        <th scope="col" class="px-6 py-4">Imagen de presentación</th>
-        <th scope="col" class="px-6 py-4">Fecha de Inventario</th>
-        <th scope="col" class="px-6 py-4">Proveedor</th>
-        <th scope="col" class="px-6 py-4">Herramientas</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let producto of productos; let i = index" class="border-b">
-        <td class="whitespace-nowrap px-6 py-4 font-medium">
-          {{ producto.id }}
-        </td>
-        <td class="whitespace-nowrap px-6 py-4 font-medium">
-          {{ producto.nombreProducto }}
-        </td>
-        <td class="whitespace-nowrap px-6 py-4 font-medium">
-          {{ producto.cantidadAMano }}
-        </td>
-        <td class="whitespace-nowrap px-6 py-4 font-medium">
-          {{ producto.cantidadContada }}
-        </td>
-        <td class="whitespace-nowrap px-6 py-4 font-medium">
-          <img
-            [src]="ipImg + producto.presentacion"
-            alt="noImage"
-            class="h-[50px] w-[50px]"
-          />
-        </td>
-        <td class="whitespace-nowrap px-6 py-4 font-medium">
-          {{ producto.fechaDeInventario | date : "MMMM - dd - y" : " " : "es" }}
-        </td>
-        <td class="whitespace-nowrap px-6 py-4 font-medium">
-          {{ producto.nombreSupplier }}
-        </td>
-        <td class="whitespace-nowrap px-6 py-4 font-medium">
-          <button
-            [routerLink]="['/agregarProducto', producto.id]"
-            mat-raised-button
-            type="button"
-            class="bg-blue-500 mr-1"
-          >
-            <i class="fa-solid fa-pen"></i>
-          </button>
-
-          <!-- Aca este btn llevará a un componente que registre el historial de inventarios, se hará a futuro, por el momento solo
-               disparará una alerta con Swal -->
-          <button mat-raised-button type="button" class="bg-slate-500 mr-1">
-            <i class="fa-solid fa-list fa-lg"></i>
-          </button>
-
-          <!-- Aca hay que poner el evento click que elimine un producto de la base de datos -->
-          <button
-            (click)="deleteProducto(producto, i)"
-            mat-raised-button
-            type="button"
-            class="bg-red-500"
-          >
-            <i class="fa-sharp fa-solid fa-trash"></i>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-<mat-form-field class="mt-10">
+<mat-form-field
+  class="animate__animated animate__fadeIn"
+  animate__animated
+  animate__fadeIn
+  *ngIf="!isLoading && productos.length"
+>
   <mat-label>Filter</mat-label>
   <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input />
 </mat-form-field>
 
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-  <!-- Position Column -->
+<table
+  *ngIf="!isLoading && productos.length"
+  mat-table
+  matSort
+  (matSortChange)="announceSortChange($event)"
+  [dataSource]="dataSource"
+  class="mat-elevation-z8 shadow-lg shadow-slate-400"
+>
+  <!-- ID Column -->
   <ng-container matColumnDef="id">
-    <th class="text-neutral-50" mat-header-cell *matHeaderCellDef>ID</th>
+    <th
+      class="text-neutral-50"
+      mat-header-cell
+      mat-sort-header
+      sortActionDescription="Sort by ID"
+      *matHeaderCellDef
+    >
+      ID
+    </th>
     <td mat-cell *matCellDef="let producto">{{ producto.id }}</td>
   </ng-container>
 
-  <!-- Name Column -->
+  <!-- Nombre del Producto Column -->
   <ng-container matColumnDef="nombreProducto">
-    <th class="text-neutral-50" mat-header-cell *matHeaderCellDef>
+    <th
+      class="text-neutral-50"
+      mat-sort-header
+      sortActionDescription="Sort by name of product"
+      mat-header-cell
+      *matHeaderCellDef
+    >
       Nombre Producto
     </th>
     <td mat-cell *matCellDef="let producto">{{ producto.nombreProducto }}</td>
   </ng-container>
 
-  <!-- Weight Column -->
+  <!-- Cantidad a mano Column -->
   <ng-container matColumnDef="cantidadAMano">
-    <th class="text-neutral-50" mat-header-cell *matHeaderCellDef>
+    <th
+      class="text-neutral-50"
+      mat-sort-header
+      sortActionDescription="Sort by amount"
+      mat-header-cell
+      *matHeaderCellDef
+    >
       Cantidad a mano
     </th>
     <td mat-cell *matCellDef="let producto">{{ producto.cantidadAMano }}</td>
   </ng-container>
 
-  <!-- Symbol Column -->
+  <!-- Cantidad contado Column -->
   <ng-container matColumnDef="cantidadContada">
-    <th class="text-neutral-50" mat-header-cell *matHeaderCellDef>
+    <th
+      class="text-neutral-50"
+      mat-sort-header
+      sortActionDescription="Sort by amount counted"
+      mat-header-cell
+      *matHeaderCellDef
+    >
       Cantidad contada
     </th>
     <td mat-cell *matCellDef="let producto">{{ producto.cantidadContada }}</td>
   </ng-container>
 
+  <!-- Imagen de presentación column -->
   <ng-container matColumnDef="presentacion">
     <th class="text-neutral-50" mat-header-cell *matHeaderCellDef>
       Imagen de presentación
@@ -157,8 +123,15 @@
     </td>
   </ng-container>
 
+  <!-- Fecha de inventario column -->
   <ng-container matColumnDef="fechaDeInventario">
-    <th class="text-neutral-50" mat-header-cell *matHeaderCellDef>
+    <th
+      class="text-neutral-50"
+      mat-sort-header
+      sortActionDescription="Sort by inventory date"
+      mat-header-cell
+      *matHeaderCellDef
+    >
       Fecha de Inventario
     </th>
     <td mat-cell *matCellDef="let producto">
@@ -167,10 +140,19 @@
   </ng-container>
 
   <ng-container matColumnDef="nombreSupplier">
-    <th class="text-neutral-50" mat-header-cell *matHeaderCellDef>Proveedor</th>
+    <th
+      class="text-neutral-50"
+      mat-sort-header
+      sortActionDescription="Sort by supplier"
+      mat-header-cell
+      *matHeaderCellDef
+    >
+      Proveedor
+    </th>
     <td mat-cell *matCellDef="let producto">{{ producto.nombreSupplier }}</td>
   </ng-container>
 
+  <!-- Herramientas column -->
   <ng-container matColumnDef="Herramientas">
     <th class="text-neutral-50" mat-header-cell *matHeaderCellDef>
       Herramientas
@@ -217,13 +199,15 @@
   ></tr>
 </table>
 <mat-paginator
-  class="mt-1"
-  [pageSizeOptions]="[1, 2, 3, 10, 20]"
-  length="10"
+  *ngIf="!isLoading && productos.length > 0"
+  class="shadow-lg shadow-slate-400"
+  [pageSizeOptions]="[5, 10, 20]"
+  [length]="productos.length"
   aria-label="Select page of periodic elements"
 >
 </mat-paginator>
 
+<!-- Alertas de cuando está cargando la data o con ausencia de data -->
 <mat-card
   *ngIf="isLoading"
   class="mt-4 bg-blue-200 text-center animate__animated animate__fadeIn"

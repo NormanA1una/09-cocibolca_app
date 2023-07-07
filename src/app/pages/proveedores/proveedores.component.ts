@@ -1,3 +1,4 @@
+import { DataSource } from '@angular/cdk/collections';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ProveedorModel } from 'src/app/models/proveedor.model';
@@ -79,13 +80,13 @@ export class ProveedoresComponent implements OnInit {
       if (resp.value) {
         this.proveedores.splice(i, 1);
 
-        this.http
+        /* this.http
           .delete(`http://localhost:3000/file/${proveedor.logo}`)
           .subscribe((resp) => {
             console.log(resp);
 
             console.log('Llamada HTTP DELETE exitosa');
-          });
+          }); */
         this.proveedoresServices.deleteProveedor(proveedor.id).subscribe();
       }
     });
