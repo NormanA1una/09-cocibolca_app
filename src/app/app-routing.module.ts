@@ -4,6 +4,8 @@ import { ProveedoresComponent } from './pages/proveedores/proveedores.component'
 import { ProveedorComponent } from './pages/proveedor/proveedor.component';
 import { ProveedorDetalleComponent } from './pages/proveedor-detalle/proveedor-detalle.component';
 import { AgregarProductoComponent } from './pages/agregar-producto/agregar-producto.component';
+import { LogInComponent } from './pages/log-in/log-in.component';
+import { SingUpComponent } from './pages/sing-up/sing-up.component';
 
 const routes: Routes = [
   {
@@ -16,7 +18,9 @@ const routes: Routes = [
     component: ProveedorDetalleComponent,
   },
   { path: 'agregarProducto/:id', component: AgregarProductoComponent },
-  { path: '**', pathMatch: 'full', redirectTo: 'proveedores' },
+  { path: 'logIn', component: LogInComponent },
+  { path: 'singUp', component: SingUpComponent },
+  { path: '**', pathMatch: 'full', redirectTo: 'logIn' },
 ];
 
 @NgModule({

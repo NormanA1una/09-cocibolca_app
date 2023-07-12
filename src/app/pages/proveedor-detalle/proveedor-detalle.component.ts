@@ -69,12 +69,22 @@ export class ProveedorDetalleComponent implements OnInit {
       showCancelButton: true,
     }).then((resp) => {
       if (resp.value) {
-        this.productos.splice(i, 1);
+        const { pageIndex, pageSize } = this.paginator;
+
+        const removeIndex = i + pageIndex * pageSize;
+        console.log(removeIndex);
+
+        this.productos.splice(removeIndex, 1);
+        this.dataSource.data = this.productos;
+
+        this.productoService.deleteProducto(producto.id).subscribe();
+
+        /* this.productos.splice(i, 1);
         this.dataSource.data = this.productos;
 
         console.log(this.dataSource);
 
-        this.productoService.deleteProducto(producto.id).subscribe();
+        this.productoService.deleteProducto(producto.id).subscribe(); */
       }
     });
   }

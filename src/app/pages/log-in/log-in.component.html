@@ -1,0 +1,88 @@
+<h1
+  class="text-center mt-52 font-bold text-3xl animate__animated animate__fadeIn"
+>
+  INICIAR SESIÓN
+</h1>
+
+<form
+  (ngSubmit)="guardarForm()"
+  [formGroup]="forma"
+  autocomplete="off"
+  class="animate__animated animate__fadeInLeft text-center"
+  #f="ngForm"
+>
+  <!-- Div que va a contener los inputs del formulario -->
+  <div class="w-[600px] mx-auto">
+    <!-- Input del correo -->
+    <mat-form-field class="w-full mb-2">
+      <mat-label>Correo Electrónico</mat-label>
+      <input
+        [(ngModel)]="usuario.correo"
+        formControlName="correo"
+        matInput
+        type="text"
+        #correo
+      />
+      <mat-hint
+        *ngIf="
+          correoNoValido || (f.submitted && forma.controls['correo'].errors)
+        "
+        class="text-red-600 animate__animated animate__fadeIn"
+        >Correo inválido
+        <i
+          class="fa-solid fa-triangle-exclamation fa-xl"
+          style="color: #ff0000"
+        ></i
+      ></mat-hint>
+    </mat-form-field>
+
+    <!-- Input de la contraseña -->
+    <mat-form-field class="w-full mb-2">
+      <mat-label>Contraseña</mat-label>
+      <input
+        [(ngModel)]="usuario.password"
+        formControlName="password"
+        matInput
+        type="password"
+      />
+      <mat-hint
+        *ngIf="
+          passwordNoValida || (f.submitted && forma.controls['password'].errors)
+        "
+        class="text-red-600 animate__animated animate__fadeIn"
+        >Contraseña Incorrecta
+        <i
+          class="fa-solid fa-triangle-exclamation fa-xl"
+          style="color: #ff0000"
+        ></i
+      ></mat-hint>
+    </mat-form-field>
+  </div>
+
+  <div class="flex justify-center font-medium">
+    <div class="mr-4">
+      <input
+        type="checkbox"
+        [(ngModel)]="recordarme"
+        formControlName="recordarme"
+        class="mr-4"
+        id="ckb1"
+      />
+      <label for="ckb1">Recordar mi Usuario</label>
+    </div>
+    <div>
+      <a routerLink="/singUp" class="hover:text-blue-600 hover:underline"
+        >¿No tienes un Usuario? / Crear</a
+      >
+    </div>
+  </div>
+
+  <button
+    mat-raised-button
+    color="primary"
+    class="mt-4 w-[600px]"
+    type="submit"
+  >
+    Inciar sesión
+  </button>
+</form>

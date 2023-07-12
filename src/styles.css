@@ -11,3 +11,11 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+.animate__animated.animate__fadeInRight {
+  --animate-duration: 0.5s;
+}
+
+.animate__animated.animate__fadeInLeft {
+  --animate-duration: 0.5s;
+}
