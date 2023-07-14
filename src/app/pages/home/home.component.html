@@ -1,0 +1,51 @@
+<mat-card class="h-[800px] animate__animated animate__fadeIn">
+  <mat-card-header class="p-4 items-end bg-yellow-950">
+    <mat-card-title class="text-5xl text-neutral-50"
+      >Licoreria Cocibolca</mat-card-title
+    >
+    <span class="flex-1"></span>
+
+    <div class="text-xl font-bold mr-2 text-neutral-50">
+      Usuario: <span class="font-normal">{{ usuarioActivo }}</span>
+    </div>
+
+    <button mat-raised-button color="warn" (click)="cerrarSesion()">
+      Cerrar Sesión
+    </button>
+  </mat-card-header>
+
+  <hr />
+
+  <mat-card-content>
+    <div class="flex justify-center my-10">
+      <button
+        mat-raised-button
+        color="primary"
+        class="h-40 w-40 bg-slate-500 mr-4 transition hover:-translate-y-1 hover:scale-110"
+        [routerLink]="['/proveedores']"
+      >
+        Proveedores <i class="fa-solid fa-truck-field fa-3x block"></i>
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        class="h-40 w-40 bg-slate-500 transition hover:-translate-y-1 hover:scale-110"
+        [routerLink]="['/productos']"
+      >
+        Productos <i class="fa-sharp fa-solid fa-wine-bottle fa-3x block"></i>
+      </button>
+    </div>
+    <hr class="my-4" />
+    <div class="flex justify-center">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d487.9240194134136!2d-85.95106766889133!3d11.947327970741913!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f740d4892feba1d%3A0xe7740edcd3e77d50!2sLicoreria%20Cocibolca!5e0!3m2!1sen!2sni!4v1689277342830!5m2!1sen!2sni"
+        width="600"
+        height="450"
+        style="border: 0"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </div>
+  </mat-card-content>
+</mat-card>

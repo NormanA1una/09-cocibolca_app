@@ -59,7 +59,7 @@ export class SingUpComponent implements OnInit {
           Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$'),
         ],
       ],
-      nombreYApellidos: ['', [Validators.minLength(2), Validators.required]],
+      username: ['', [Validators.minLength(2), Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       recordarme: [''],
     });
@@ -90,9 +90,14 @@ export class SingUpComponent implements OnInit {
         console.log(resp);
         Swal.fire({
           title: 'USUARIO CREADO',
-          text: `Puedes inciar sesión, ${this.usuario.nombreYApellidos}`,
+          text: `Puedes inciar sesión, ${this.usuario.username}`,
           icon: 'success',
         });
+
+        if (this.recordarme) {
+          sessionStorage.setItem('username', this.usuario.username);
+        }
+
         this.router.navigate(['/logIn']);
       },
       error: (e) => {

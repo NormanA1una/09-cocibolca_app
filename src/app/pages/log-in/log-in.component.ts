@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UsuarioModel } from 'src/app/models/nuevoUsuario.model';
 import { UsuarioLogin } from 'src/app/models/usuarioLogin.interface';
 import { AuthService } from 'src/app/services/auth.service';
@@ -23,12 +23,20 @@ export class LogInComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.crearFormulario();
+
+    this.redirectHome();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (sessionStorage.getItem('username')) {
+      this.usuario.username = sessionStorage.getItem('username');
+      this.recordarme = true;
+    }
+  }
 
   get correoNoValido() {
     return (
@@ -44,13 +52,7 @@ export class LogInComponent implements OnInit {
 
   crearFormulario() {
     this.forma = this.fb.group({
-      correo: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3}$'),
-        ],
-      ],
+      username: ['', [Validators.minLength(2), Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       recordarme: [''],
     });
@@ -78,9 +80,19 @@ export class LogInComponent implements OnInit {
 
     this.authService.logIn(this.usuario).subscribe({
       next: (resp) => {
-        Swal.close();
         console.log(resp);
-        this.router.navigate(['/proveedores']);
+
+        Swal.close();
+
+        if (this.recordarme) {
+          sessionStorage.setItem('username', this.usuario.username);
+        } else {
+          if (this.usuario.username === sessionStorage.getItem('username')) {
+            sessionStorage.removeItem('username');
+          }
+        }
+
+        this.router.navigate(['/home']);
       },
       error: (e) => {
         console.log(e);
@@ -91,5 +103,14 @@ export class LogInComponent implements OnInit {
         });
       },
     });
+  }
+
+  redirectHome() {
+    if (
+      this.authService.isAuthenticated() &&
+      this.route.routeConfig?.path === 'logIn'
+    ) {
+      this.router.navigate(['/home']);
+    }
   }
 }

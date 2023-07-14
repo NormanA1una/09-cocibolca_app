@@ -35,22 +35,21 @@
       ></mat-hint>
     </mat-form-field>
 
-    <!-- Input del nombre y apellidos -->
+    <!-- Input del username -->
     <mat-form-field class="w-full mb-2">
-      <mat-label>Nombre y Apellidos</mat-label>
+      <mat-label>Nombre de usuario</mat-label>
       <input
-        [(ngModel)]="usuario.nombreYApellidos"
-        formControlName="nombreYApellidos"
+        [(ngModel)]="usuario.username"
+        formControlName="username"
         matInput
         type="text"
       />
       <mat-hint
         *ngIf="
-          nombreNoValido ||
-          (f.submitted && forma.controls['nombreYApellidos'].errors)
+          nombreNoValido || (f.submitted && forma.controls['username'].errors)
         "
         class="text-red-600 animate__animated animate__fadeIn"
-        >Nombre no válido
+        >Nombre de usuario no válido
         <i
           class="fa-solid fa-triangle-exclamation fa-xl"
           style="color: #ff0000"

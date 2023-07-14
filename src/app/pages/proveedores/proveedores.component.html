@@ -1,4 +1,4 @@
-<div class="flex">
+<div class="flex items-center">
   <a routerLink="/proveedores">
     <img
       src="assets/img/licoreriaCocibolcaLogo.jpg"
@@ -8,6 +8,11 @@
     />
   </a>
   <h1 class="my-auto font-bold">Listado de Proveedores</h1>
+  <span class="flex-1"></span>
+
+  <button mat-raised-button class="bg-green-500" [routerLink]="['/home']">
+    <i class="fa-solid fa-house"></i> Home
+  </button>
 </div>
 <hr class="mt-2" />
 
@@ -15,8 +20,9 @@
   <button
     [routerLink]="['/productos']"
     mat-raised-button
+    color="accent"
     type="button"
-    class="bg-slate-500 mr-1 mt-4"
+    class="mr-1 mt-4"
   >
     <i class="fa-solid fa-list fa-lg"></i> Productos
   </button>

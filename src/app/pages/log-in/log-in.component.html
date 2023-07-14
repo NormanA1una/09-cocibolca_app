@@ -13,22 +13,21 @@
 >
   <!-- Div que va a contener los inputs del formulario -->
   <div class="w-[600px] mx-auto">
-    <!-- Input del correo -->
+    <!-- Input del username -->
     <mat-form-field class="w-full mb-2">
-      <mat-label>Correo Electrónico</mat-label>
+      <mat-label>Nombre de Usuario</mat-label>
       <input
-        [(ngModel)]="usuario.correo"
-        formControlName="correo"
+        [(ngModel)]="usuario.username"
+        formControlName="username"
         matInput
         type="text"
-        #correo
       />
       <mat-hint
         *ngIf="
-          correoNoValido || (f.submitted && forma.controls['correo'].errors)
+          correoNoValido || (f.submitted && forma.controls['username'].errors)
         "
         class="text-red-600 animate__animated animate__fadeIn"
-        >Correo inválido
+        >El nombre de usuario es obligatorio
         <i
           class="fa-solid fa-triangle-exclamation fa-xl"
           style="color: #ff0000"

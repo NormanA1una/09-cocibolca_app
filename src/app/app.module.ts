@@ -27,6 +27,7 @@ import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 import { LogInComponent } from './pages/log-in/log-in.component';
 import { SingUpComponent } from './pages/sing-up/sing-up.component';
+import { HomeComponent } from './pages/home/home.component';
 
 registerLocaleData(localeEs);
 
@@ -39,6 +40,7 @@ registerLocaleData(localeEs);
     AgregarProductoComponent,
     LogInComponent,
     SingUpComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,

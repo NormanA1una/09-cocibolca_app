@@ -1,7 +1,7 @@
-import { DataSource } from '@angular/cdk/collections';
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ProveedorModel } from 'src/app/models/proveedor.model';
+import { AuthService } from 'src/app/services/auth.service';
 import { ProveedoresServicesService } from 'src/app/services/proveedores-services.service';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
@@ -23,7 +23,8 @@ export class ProveedoresComponent implements OnInit {
 
   constructor(
     private proveedoresServices: ProveedoresServicesService,
-    private http: HttpClient
+    private auth: AuthService,
+    private router: Router
   ) {
     this.ip = environment.ip;
   }
@@ -80,13 +81,6 @@ export class ProveedoresComponent implements OnInit {
       if (resp.value) {
         this.proveedores.splice(i, 1);
 
-        /* this.http
-          .delete(`http://localhost:3000/file/${proveedor.logo}`)
-          .subscribe((resp) => {
-            console.log(resp);
-
-            console.log('Llamada HTTP DELETE exitosa');
-          }); */
         this.proveedoresServices.deleteProveedor(proveedor.id).subscribe();
       }
     });
