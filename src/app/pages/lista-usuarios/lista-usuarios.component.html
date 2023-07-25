@@ -1,0 +1,131 @@
+<div class="flex items-center">
+  <a routerLink="/proveedores">
+    <img
+      src="assets/img/licoreriaCocibolcaLogo.jpg"
+      alt="Volcan Icon"
+      width="150"
+      class="mr-2 rounded-md"
+    />
+  </a>
+  <h1 class="my-auto font-bold">Listado de Usuarios</h1>
+  <span class="flex-1"></span>
+
+  <button mat-raised-button class="bg-green-500" [routerLink]="['/home']">
+    <i class="fa-solid fa-house"></i> Home
+  </button>
+</div>
+<hr class="mt-2" />
+
+<mat-form-field
+  class="animate__animated animate__fadeIn"
+  animate__animated
+  animate__fadeIn
+  *ngIf="!isLoading && usuario.length"
+>
+  <mat-label>Filter</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input />
+</mat-form-field>
+
+<table
+  *ngIf="!isLoading && usuario.length"
+  (matSortChange)="announceSortChange($event)"
+  mat-table
+  matSort
+  [dataSource]="dataSource"
+  class="mat-elevation-z8 shadow-lg shadow-slate-400"
+>
+  <!-- ID Column -->
+  <ng-container matColumnDef="id">
+    <th
+      class="text-neutral-50"
+      mat-header-cell
+      mat-sort-header
+      sortActionDescription="Sort by ID"
+      *matHeaderCellDef
+    >
+      ID
+    </th>
+    <td mat-cell *matCellDef="let usuario">{{ usuario.id }}</td>
+  </ng-container>
+
+  <!-- Nombre de Usuario -->
+  <ng-container matColumnDef="username">
+    <th
+      class="text-neutral-50"
+      mat-sort-header
+      sortActionDescription="Sort by name of product"
+      mat-header-cell
+      *matHeaderCellDef
+    >
+      Nombre de Usuario
+    </th>
+    <td mat-cell *matCellDef="let usuario">{{ usuario.username }}</td>
+  </ng-container>
+
+  <!-- Correo electrónico -->
+  <ng-container matColumnDef="correo">
+    <th
+      class="text-neutral-50"
+      mat-sort-header
+      sortActionDescription="Sort by amount"
+      mat-header-cell
+      *matHeaderCellDef
+    >
+      Correo Electrónico
+    </th>
+    <td mat-cell *matCellDef="let usuario">{{ usuario.correo }}</td>
+  </ng-container>
+
+  <!-- Rol -->
+  <ng-container matColumnDef="roles">
+    <th
+      class="text-neutral-50"
+      mat-sort-header
+      sortActionDescription="Sort by amount counted"
+      mat-header-cell
+      *matHeaderCellDef
+    >
+      Rol
+    </th>
+    <td mat-cell *matCellDef="let usuario">
+      {{ usuario.roles | capitalizar }}
+    </td>
+  </ng-container>
+
+  <!-- Herramientas column -->
+  <ng-container matColumnDef="herramientas">
+    <th class="text-neutral-50" mat-header-cell *matHeaderCellDef>
+      Herramientas
+    </th>
+    <td mat-cell *matCellDef="let usuario; let i = index">
+      <!-- Aca hay que poner el evento click que elimine un producto de la base de datos -->
+      <button
+        (click)="borrarUsuario(usuario, i)"
+        mat-raised-button
+        type="button"
+        class="bg-red-500"
+      >
+        <i class="fa-sharp fa-solid fa-trash"></i>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr
+    class="bg-neutral-900"
+    mat-header-row
+    *matHeaderRowDef="displayedColumns"
+  ></tr>
+  <tr
+    class="animate__animated animate__fadeIn"
+    mat-row
+    *matRowDef="let row; columns: displayedColumns"
+  ></tr>
+</table>
+<mat-paginator
+  *ngIf="!isLoading && usuario.length > 0"
+  class="shadow-lg shadow-slate-400"
+  [pageSizeOptions]="[5, 10, 20]"
+  [length]="usuario.length"
+  aria-label="Select page of periodic elements"
+>
+</mat-paginator>

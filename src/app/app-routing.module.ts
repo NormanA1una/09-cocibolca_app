@@ -8,6 +8,7 @@ import { LogInComponent } from './pages/log-in/log-in.component';
 import { SingUpComponent } from './pages/sing-up/sing-up.component';
 import { authGuard } from './guards/auth.guard';
 import { HomeComponent } from './pages/home/home.component';
+import { ListaUsuariosComponent } from './pages/lista-usuarios/lista-usuarios.component';
 
 const routes: Routes = [
   {
@@ -40,6 +41,7 @@ const routes: Routes = [
     component: LogInComponent,
   },
   { path: 'singUp', component: SingUpComponent },
+  { path: 'listaUsuarios', component: ListaUsuariosComponent },
   { path: '**', pathMatch: 'full', redirectTo: 'logIn' },
 ];
 

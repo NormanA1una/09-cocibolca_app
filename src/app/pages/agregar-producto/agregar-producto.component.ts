@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,6 +17,13 @@ import Swal from 'sweetalert2';
   styleUrls: ['./agregar-producto.component.css'],
 })
 export class AgregarProductoComponent implements OnInit, OnDestroy {
+  header = {
+    headers: new HttpHeaders().set(
+      'Authorization',
+      `Bearer ${sessionStorage.getItem('user_access_token')}`
+    ),
+  };
+
   ipImg: string = environment.ipImg;
 
   statusSubmit = 'noSubmit';
@@ -123,7 +130,8 @@ export class AgregarProductoComponent implements OnInit, OnDestroy {
 
       const upload$ = this.http.post(
         'http://localhost:3000/productFile',
-        formData
+        formData,
+        this.header
       );
 
       upload$.subscribe((resp: any) => {

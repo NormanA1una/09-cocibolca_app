@@ -8,7 +8,7 @@ import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 
 import Swal from 'sweetalert2';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-proveedor',
@@ -16,6 +16,14 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./proveedor.component.css'],
 })
 export class ProveedorComponent implements OnInit, OnDestroy {
+  //La autenticación ahora es requerida, es decir que ahora en el lado del front se tiene que enviar el token, esto por medio del header.
+  header = {
+    headers: new HttpHeaders().set(
+      'Authorization',
+      `Bearer ${sessionStorage.getItem('user_access_token')}`
+    ),
+  };
+
   //Mensaje utilizado cuando no hay ninguna imagen cargada en el input de cargar imagenes
   messageNoneFile = 'No file uploaded yet.';
 
@@ -134,7 +142,11 @@ export class ProveedorComponent implements OnInit, OnDestroy {
 
       formData.append('file', file);
 
-      const upload$ = this.http.post('http://localhost:3000/file', formData);
+      const upload$ = this.http.post(
+        'http://localhost:3000/file',
+        formData,
+        this.header
+      );
 
       upload$.subscribe((resp: any) => {
         this.proveedor.logo = resp.filename;

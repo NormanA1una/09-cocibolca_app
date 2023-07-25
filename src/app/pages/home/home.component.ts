@@ -10,9 +10,17 @@ import { AuthService } from '../../services/auth.service';
 export class HomeComponent implements OnInit {
   usuarioActivo = sessionStorage.getItem('usuario_activo');
 
+  isAdmin = false;
+
   constructor(private auth: AuthService, private router: Router) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (sessionStorage.getItem('rol_usuario') === 'usuario') {
+      return;
+    } else {
+      this.isAdmin = true;
+    }
+  }
 
   cerrarSesion() {
     this.router.navigate(['/logIn']);

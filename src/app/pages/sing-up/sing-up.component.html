@@ -57,27 +57,40 @@
       ></mat-hint>
     </mat-form-field>
 
-    <!-- Input de la contraseña -->
-    <mat-form-field class="w-full mb-2">
-      <mat-label>Contraseña</mat-label>
-      <input
-        [(ngModel)]="usuario.password"
-        formControlName="password"
-        matInput
-        type="password"
-      />
-      <mat-hint
-        *ngIf="
-          passwordNoValida || (f.submitted && forma.controls['password'].errors)
-        "
-        class="text-red-600 animate__animated animate__fadeIn"
-        >La contraseña debe de tener mínimo 6 caractéres
-        <i
-          class="fa-solid fa-triangle-exclamation fa-xl"
-          style="color: #ff0000"
-        ></i
-      ></mat-hint>
-    </mat-form-field>
+    <!-- Seccion combinada!!! -->
+    <div class="flex justify-between">
+      <!-- Input de la contraseña -->
+      <mat-form-field class="w-[63%] mb-2 mr-4">
+        <mat-label>Contraseña</mat-label>
+        <input
+          [(ngModel)]="usuario.password"
+          formControlName="password"
+          matInput
+          type="password"
+        />
+        <mat-hint
+          *ngIf="
+            passwordNoValida ||
+            (f.submitted && forma.controls['password'].errors)
+          "
+          class="text-red-600 animate__animated animate__fadeIn"
+          >La contraseña debe de tener mínimo 6 caractéres
+          <i
+            class="fa-solid fa-triangle-exclamation fa-xl"
+            style="color: #ff0000"
+          ></i
+        ></mat-hint>
+      </mat-form-field>
+
+      <mat-form-field class="h-[78px]">
+        <mat-label>Rol del usuario</mat-label>
+        <mat-select formControlName="roles" [(ngModel)]="usuario.roles">
+          <mat-option *ngFor="let rol of roles" [value]="rol.value">
+            {{ rol.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </div>
 
   <div class="flex justify-center font-medium">

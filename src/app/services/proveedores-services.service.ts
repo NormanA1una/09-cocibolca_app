@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ProveedorModel } from '../models/proveedor.model';
 
@@ -8,13 +8,19 @@ import { map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class ProveedoresServicesService {
+  header = {
+    headers: new HttpHeaders().set(
+      'Authorization',
+      `Bearer ${sessionStorage.getItem('user_access_token')}`
+    ),
+  };
+
   private url = 'http://localhost:3000';
 
   constructor(private http: HttpClient) {}
 
-  //Servicio referente a los proveedores!!
   crearProveedor(proveedor: ProveedorModel) {
-    return this.http.post(`${this.url}/supplier`, proveedor).pipe(
+    return this.http.post(`${this.url}/supplier`, proveedor, this.header).pipe(
       map((resp: any) => {
         proveedor.id = resp.id;
         console.log(proveedor);
@@ -25,18 +31,22 @@ export class ProveedoresServicesService {
 
   actualizarProveedor(proveedor: ProveedorModel) {
     console.log(proveedor);
-    return this.http.put(`${this.url}/supplier/${proveedor.id}`, proveedor);
+    return this.http.put(
+      `${this.url}/supplier/${proveedor.id}`,
+      proveedor,
+      this.header
+    );
   }
 
   getProveedores() {
-    return this.http.get(`${this.url}/supplier`);
+    return this.http.get(`${this.url}/supplier`, this.header);
   }
 
   getProveedor(id: string) {
-    return this.http.get(`${this.url}/supplier/${id}`);
+    return this.http.get(`${this.url}/supplier/${id}`, this.header);
   }
 
   deleteProveedor(id: string | undefined) {
-    return this.http.delete(`${this.url}/supplier/${id}`);
+    return this.http.delete(`${this.url}/supplier/${id}`, this.header);
   }
 }

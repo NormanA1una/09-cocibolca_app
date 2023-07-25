@@ -27,7 +27,7 @@
     color="accent"
     type="button"
   >
-    Proveedores
+    <i class="fa-solid fa-list fa-lg"></i> Proveedores
   </button>
 
   <button
@@ -203,6 +203,12 @@
     mat-row
     *matRowDef="let row; columns: displayedColumns"
   ></tr>
+
+  <tr class="mat-row" *matNoDataRow>
+    <td class="mat-cell" colspan="4">
+      No data matching the filter "{{ input }}"
+    </td>
+  </tr>
 </table>
 <mat-paginator
   *ngIf="!isLoading && productos.length > 0"

@@ -28,6 +28,8 @@ import localeEs from '@angular/common/locales/es';
 import { LogInComponent } from './pages/log-in/log-in.component';
 import { SingUpComponent } from './pages/sing-up/sing-up.component';
 import { HomeComponent } from './pages/home/home.component';
+import { ListaUsuariosComponent } from './pages/lista-usuarios/lista-usuarios.component';
+import { CapitalizarPipe } from './pipes/capitalizar.pipe';
 
 registerLocaleData(localeEs);
 
@@ -41,6 +43,8 @@ registerLocaleData(localeEs);
     LogInComponent,
     SingUpComponent,
     HomeComponent,
+    ListaUsuariosComponent,
+    CapitalizarPipe,
   ],
   imports: [
     BrowserModule,

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UsuarioModel } from 'src/app/models/nuevoUsuario.model';
+import { Roles } from 'src/app/models/roles.interface';
 import { AuthService } from 'src/app/services/auth.service';
 import Swal from 'sweetalert2';
 
@@ -18,6 +19,11 @@ export class SingUpComponent implements OnInit {
   recordarme = false;
 
   alertas = false;
+
+  roles: Roles[] = [
+    { value: 'usuario', viewValue: 'Usuario' },
+    { value: 'administrador', viewValue: 'Administrador' },
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -61,6 +67,7 @@ export class SingUpComponent implements OnInit {
       ],
       username: ['', [Validators.minLength(2), Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]],
+      roles: ['', [Validators.required]],
       recordarme: [''],
     });
   }

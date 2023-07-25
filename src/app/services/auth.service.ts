@@ -23,6 +23,7 @@ export class AuthService {
     sessionStorage.removeItem('user_access_token');
     sessionStorage.removeItem('token_expira');
     sessionStorage.removeItem('usuario_activo');
+    sessionStorage.removeItem('rol_usuario');
   }
 
   //Log In
@@ -57,10 +58,11 @@ export class AuthService {
     );
 
     this.userToken = token;
-    console.log(tokenDecode);
+    console.log('Token Decode', tokenDecode);
 
     sessionStorage.setItem('user_access_token', token);
     sessionStorage.setItem('usuario_activo', tokenDecode.username);
+    sessionStorage.setItem('rol_usuario', tokenDecode.rol);
   }
 
   //Lectura token inicial

@@ -1,39 +1,26 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ProductoModel } from 'src/app/models/producto.model';
-import { ProductosService } from 'src/app/services/productos.service';
-import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
+import { UsuarioModel } from 'src/app/models/nuevoUsuario.model';
+import { UserService } from 'src/app/services/user.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-proveedor-detalle',
-  templateUrl: './proveedor-detalle.component.html',
-  styleUrls: ['./proveedor-detalle.component.css'],
+  selector: 'app-lista-usuarios',
+  templateUrl: './lista-usuarios.component.html',
+  styleUrls: ['./lista-usuarios.component.css'],
 })
-export class ProveedorDetalleComponent implements OnInit {
-  valueFilter = 'Bimbo';
-
-  input = '';
-
-  ipImg: string = environment.ipImg;
-
-  productos: ProductoModel[] = [];
-
-  //PROBANDO HACER LA TABLA CON MATERIAL
+export class ListaUsuariosComponent implements OnInit {
   dataSource: any;
   displayedColumns: string[] = [
     'id',
-    'nombreProducto',
-    'cantidadAMano',
-    'cantidadContada',
-    'presentacion',
-    'fechaDeInventario',
-    'nombreSupplier',
-    'Herramientas',
+    'username',
+    'correo',
+    'roles',
+    'herramientas',
   ];
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -41,32 +28,36 @@ export class ProveedorDetalleComponent implements OnInit {
 
   isLoading = false;
 
+  usuario: UsuarioModel[] = [];
+
   constructor(
-    private productoService: ProductosService,
+    private userService: UserService,
     private ref: ChangeDetectorRef,
-    private _liveAnnouncer: LiveAnnouncer
-  ) {}
+    private _liveAnnouncer: LiveAnnouncer,
+    private router: Router
+  ) {
+    this.noAdmin();
+  }
 
   ngOnInit() {
     this.isLoading = true;
 
-    this.productoService.getProductos().subscribe((resp: any) => {
+    this.userService.getUsers().subscribe((resp: any) => {
       console.log(resp);
 
-      this.productos = resp.reverse();
+      this.usuario = resp.reverse();
       this.isLoading = false;
-      this.dataSource = new MatTableDataSource<ProductoModel>(this.productos);
-      console.log(this.dataSource);
+      this.dataSource = new MatTableDataSource<UsuarioModel>(this.usuario);
       this.ref.detectChanges();
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     });
   }
 
-  deleteProducto(producto: ProductoModel, i: number) {
+  borrarUsuario(usuario: UsuarioModel, i: number) {
     Swal.fire({
       title: 'AVISO',
-      text: `¿Está seguro que quieres eliminar "${producto.nombreProducto}"?`,
+      text: `¿Está seguro que quieres eliminar el usuario: "${usuario.username}"?`,
       icon: 'question',
       showConfirmButton: true,
       showCancelButton: true,
@@ -75,21 +66,25 @@ export class ProveedorDetalleComponent implements OnInit {
         const { pageIndex, pageSize } = this.paginator;
 
         const removeIndex = i + pageIndex * pageSize;
-        console.log(removeIndex);
 
-        this.productos.splice(removeIndex, 1);
-        this.dataSource.data = this.productos;
+        this.usuario.splice(removeIndex, 1);
+        this.dataSource.data = this.usuario;
 
-        this.productoService.deleteProducto(producto.id).subscribe();
+        this.userService.deleteUser(usuario.id).subscribe((resp) => {
+          console.log(resp);
+        });
       }
     });
   }
 
+  noAdmin() {
+    if (sessionStorage.getItem('rol_usuario') === 'usuario') {
+      this.router.navigate(['/home']);
+    }
+  }
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-
-    this.input = filterValue;
-
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
