@@ -1,5 +1,4 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
@@ -15,8 +14,6 @@ import Swal from 'sweetalert2';
   styleUrls: ['./proveedor-detalle.component.css'],
 })
 export class ProveedorDetalleComponent implements OnInit {
-  valueFilter = 'Bimbo';
-
   input = '';
 
   ipImg: string = environment.ipImg;
@@ -75,7 +72,6 @@ export class ProveedorDetalleComponent implements OnInit {
         const { pageIndex, pageSize } = this.paginator;
 
         const removeIndex = i + pageIndex * pageSize;
-        console.log(removeIndex);
 
         this.productos.splice(removeIndex, 1);
         this.dataSource.data = this.productos;

@@ -21,11 +21,7 @@ export class ProveedoresComponent implements OnInit {
   proveedores: ProveedorModel[] = [];
   isLoading = false;
 
-  constructor(
-    private proveedoresServices: ProveedoresServicesService,
-    private auth: AuthService,
-    private router: Router
-  ) {
+  constructor(private proveedoresServices: ProveedoresServicesService) {
     this.ip = environment.ip;
   }
 
@@ -64,8 +60,6 @@ export class ProveedoresComponent implements OnInit {
           text: 'Información actualizada correctamente!',
           icon: 'success',
         });
-
-        console.log(this.proveedorUpdate.estado);
       }
     });
   }

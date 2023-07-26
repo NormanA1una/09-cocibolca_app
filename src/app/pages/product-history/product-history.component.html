@@ -8,7 +8,9 @@
     />
   </a>
   <div class="ml-4">
-    <h1 class="my-auto font-bold">Agregar Producto nuevo</h1>
+    <h1 class="my-auto font-bold">
+      Historial de inventario: *PONER NOMBRE DE PRODUCTO*
+    </h1>
   </div>
 
   <span class="flex-1"></span>
@@ -19,58 +21,51 @@
 </div>
 <hr class="my-2" />
 
-<div class="text-right">
-  <button
-    routerLink="/proveedores"
-    class="mt-4 mr-2"
-    mat-raised-button
-    color="accent"
-    type="button"
+<div class="flex justify-between items-center">
+  <mat-form-field
+    class="animate__animated animate__fadeIn"
+    animate__animated
+    animate__fadeIn
+    *ngIf="!isLoading && productHistory.length"
   >
-    <i class="fa-solid fa-list fa-lg"></i> Proveedores
-  </button>
+    <mat-label>Filter</mat-label>
+    <input
+      matInput
+      (keyup)="applyFilter($event)"
+      placeholder="Ex. ium"
+      #input
+    />
+  </mat-form-field>
 
   <button
-    routerLink="/agregarProducto/nuevo"
-    class="mt-4"
+    *ngIf="productHistory.length"
+    (click)="deleteRecords()"
     mat-raised-button
-    color="primary"
-    type="button"
+    color="warn"
   >
-    <i class="fa-regular fa-plus"></i> Agregar Producto
+    Borrar el Historial
   </button>
 </div>
-
-<mat-form-field
-  class="animate__animated animate__fadeIn"
-  animate__animated
-  animate__fadeIn
-  *ngIf="!isLoading && productos.length"
->
-  <mat-label>Filter</mat-label>
-  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input />
-</mat-form-field>
-
 <table
-  *ngIf="!isLoading && productos.length"
+  *ngIf="!isLoading && productHistory.length"
   mat-table
   matSort
   (matSortChange)="announceSortChange($event)"
   [dataSource]="dataSource"
   class="mat-elevation-z8 shadow-lg shadow-slate-400"
 >
-  <!-- ID Column -->
-  <ng-container matColumnDef="id">
+  <!-- Product_ID Column -->
+  <ng-container matColumnDef="product_id">
     <th
       class="text-neutral-50"
       mat-header-cell
       mat-sort-header
-      sortActionDescription="Sort by ID"
+      sortActionDescription="Sort by product_id"
       *matHeaderCellDef
     >
-      ID
+      Product_ID
     </th>
-    <td mat-cell *matCellDef="let producto">{{ producto.id }}</td>
+    <td mat-cell *matCellDef="let producto">{{ producto.product_id }}</td>
   </ng-container>
 
   <!-- Nombre del Producto Column -->
@@ -115,20 +110,6 @@
     <td mat-cell *matCellDef="let producto">{{ producto.cantidadContada }}</td>
   </ng-container>
 
-  <!-- Imagen de presentación column -->
-  <ng-container matColumnDef="presentacion">
-    <th class="text-neutral-50" mat-header-cell *matHeaderCellDef>
-      Imagen de presentación
-    </th>
-    <td mat-cell *matCellDef="let producto">
-      <img
-        [src]="ipImg + producto.presentacion"
-        alt="noImage"
-        class="h-[50px] w-[50px] my-2"
-      />
-    </td>
-  </ng-container>
-
   <!-- Fecha de inventario column -->
   <ng-container matColumnDef="fechaDeInventario">
     <th
@@ -158,46 +139,6 @@
     <td mat-cell *matCellDef="let producto">{{ producto.nombreSupplier }}</td>
   </ng-container>
 
-  <!-- Herramientas column -->
-  <ng-container matColumnDef="Herramientas">
-    <th class="text-neutral-50" mat-header-cell *matHeaderCellDef>
-      Herramientas
-    </th>
-    <td mat-cell *matCellDef="let producto; let i = index">
-      <div class="flex gap-x-4">
-        <button
-          [routerLink]="['/agregarProducto', producto.id]"
-          mat-raised-button
-          type="button"
-          class="bg-blue-500 mr-1"
-        >
-          <i class="fa-solid fa-pen"></i>
-        </button>
-
-        <!-- Aca este btn llevará a un componente que registre el historial de inventarios, se hará a futuro, por el momento solo
-           disparará una alerta con Swal -->
-        <button
-          [routerLink]="['/productHistory', producto.id]"
-          mat-raised-button
-          type="button"
-          class="bg-slate-500 mr-1"
-        >
-          <i class="fa-solid fa-list fa-lg"></i>
-        </button>
-
-        <!-- Aca hay que poner el evento click que elimine un producto de la base de datos -->
-        <button
-          (click)="deleteProducto(producto, i)"
-          mat-raised-button
-          type="button"
-          class="bg-red-500"
-        >
-          <i class="fa-sharp fa-solid fa-trash"></i>
-        </button>
-      </div>
-    </td>
-  </ng-container>
-
   <tr
     class="bg-neutral-900"
     mat-header-row
@@ -216,10 +157,10 @@
   </tr>
 </table>
 <mat-paginator
-  *ngIf="!isLoading && productos.length > 0"
+  *ngIf="!isLoading && productHistory.length > 0"
   class="shadow-lg shadow-slate-400"
   [pageSizeOptions]="[5, 10, 20]"
-  [length]="productos.length"
+  [length]="productHistory.length"
   aria-label="Select page of periodic elements"
 >
 </mat-paginator>
@@ -238,7 +179,7 @@
 </mat-card>
 
 <mat-card
-  *ngIf="!isLoading && productos.length === 0"
+  *ngIf="!isLoading && productHistory.length === 0"
   class="mt-4 bg-yellow-200 text-center animate__animated animate__fadeIn"
 >
   <mat-card-title>No hay registros</mat-card-title>

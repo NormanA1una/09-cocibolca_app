@@ -65,8 +65,6 @@ export class AgregarProductoComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log(this.forma);
-
     const id: any = this.route.snapshot.paramMap.get('id');
 
     if (id !== 'nuevo') {
@@ -185,20 +183,21 @@ export class AgregarProductoComponent implements OnInit, OnDestroy {
     }
 
     peticion.subscribe((resp) => {
+      const product_id: any = this.route.snapshot.paramMap.get('id');
+
       Swal.fire({
         title: this.producto.nombreProducto,
         text: 'Información actualizada correctamente',
         icon: 'success',
       });
 
-      console.log(resp.id);
-      console.log(this.forma);
-
-      this.statusSubmit = 'submit';
-      this.forma.reset();
-      this.fileName = '';
-      this.producto.presentacion = '';
-      this.producto.id = undefined;
+      if (product_id === 'nuevo') {
+        this.statusSubmit = 'submit';
+        this.forma.reset();
+        this.fileName = '';
+        this.producto.presentacion = '';
+        this.producto.id = undefined;
+      }
     });
   }
 }

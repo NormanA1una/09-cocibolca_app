@@ -30,6 +30,7 @@ import { SingUpComponent } from './pages/sing-up/sing-up.component';
 import { HomeComponent } from './pages/home/home.component';
 import { ListaUsuariosComponent } from './pages/lista-usuarios/lista-usuarios.component';
 import { CapitalizarPipe } from './pipes/capitalizar.pipe';
+import { ProductHistoryComponent } from './pages/product-history/product-history.component';
 
 registerLocaleData(localeEs);
 
@@ -45,6 +46,7 @@ registerLocaleData(localeEs);
     HomeComponent,
     ListaUsuariosComponent,
     CapitalizarPipe,
+    ProductHistoryComponent,
   ],
   imports: [
     BrowserModule,

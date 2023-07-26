@@ -9,6 +9,7 @@ import { SingUpComponent } from './pages/sing-up/sing-up.component';
 import { authGuard } from './guards/auth.guard';
 import { HomeComponent } from './pages/home/home.component';
 import { ListaUsuariosComponent } from './pages/lista-usuarios/lista-usuarios.component';
+import { ProductHistoryComponent } from './pages/product-history/product-history.component';
 
 const routes: Routes = [
   {
@@ -34,6 +35,11 @@ const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'productHistory/:id',
+    component: ProductHistoryComponent,
     canActivate: [authGuard],
   },
   {
